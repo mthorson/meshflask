@@ -2,15 +2,14 @@
 
 ![meshFlask screenshot](docs/screenshot.png)
 
-A desktop browser and organizer for 3D model files. This project is
-aimed specifically at the 3D printing community but will be enhanced for
-3D artists as well.
+A desktop browser and organizer for 3D model files.
+The current build is specifically aimed at the 3D printing community.
 
-Currently we target file formats common to 3D printing:
+Supported file formats common to 3D printing:
 **glb, gltf, obj, stl, ply, 3mf**.
 
-If your collection of STL, OBJ, and 3MF files is a dumpster fire that's
-difficult to search through, this is for you.
+Is your collection of STL, OBJ, and 3MF files is a dumpster fire?
+Well then, this app is for you!
 
 ## What's in it
 
