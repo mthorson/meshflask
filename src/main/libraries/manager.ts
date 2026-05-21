@@ -206,7 +206,7 @@ export function removeLibrary(args: {
   if (args.deleteCache && entry) {
     try {
       rmSync(join(entry.mountPath, DB_FILENAME), { force: true });
-      rmSync(join(entry.mountPath, '.warehouse3d'), { recursive: true, force: true });
+      rmSync(join(entry.mountPath, '.meshFlask'), { recursive: true, force: true });
     } catch (e) {
       return {
         ok: false,

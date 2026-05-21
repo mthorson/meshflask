@@ -1396,7 +1396,7 @@ export function App() {
       <Stack align="center" gap="xs">
         <Text c="dimmed">No libraries yet.</Text>
         <Text size="sm" c="dimmed">
-          Click "Add library" in the sidebar to point Warehouse3D at a folder of 3D files.
+          Click "Add library" in the sidebar to point meshFlask at a folder of 3D files.
         </Text>
       </Stack>
     </Center>
@@ -1488,7 +1488,7 @@ export function App() {
           <Group h={44} px="md" gap="md" wrap="nowrap">
             <Group gap={8} wrap="nowrap" style={{ flexShrink: 0 }}>
               <Logo size={22} />
-              <Text fw={600}>Warehouse3D</Text>
+              <Text fw={600}>meshFlask</Text>
             </Group>
             <Divider orientation="vertical" />
             <Breadcrumbs

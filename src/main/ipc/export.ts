@@ -172,7 +172,7 @@ function buildContactSheetHtml(
     </style>
   </head>
   <body>
-    <h1>Warehouse3D contact sheet — ${items.length} file${items.length === 1 ? '' : 's'}</h1>
+    <h1>meshFlask contact sheet — ${items.length} file${items.length === 1 ? '' : 's'}</h1>
     <div class="grid">${cells}</div>
   </body>
 </html>`;

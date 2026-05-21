@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import type { OpenLibrary } from '@main/libraries/manager';
 import { queueRunner } from '@main/thumb-pool/queue-runner';
 
-const THUMBS_DIR = '.warehouse3d/thumbs';
+const THUMBS_DIR = '.meshFlask/thumbs';
 
 /**
  * Wipe every `thumbnails` row for a library and re-queue every known file
@@ -17,11 +17,11 @@ export function rebuildThumbnailCache(library: OpenLibrary): void {
 }
 
 /**
- * Walk `<root>/.warehouse3d/thumbs/**` and delete any sidecar PNG/WebP whose
+ * Walk `<root>/.meshFlask/thumbs/**` and delete any sidecar PNG/WebP whose
  * `file_id` (encoded in the filename) is no longer present in the DB.
  * Returns the number of files removed.
  *
- * Sidecar layout: `.warehouse3d/thumbs/<aa>/<bb>/<file_id>.webp`
+ * Sidecar layout: `.meshFlask/thumbs/<aa>/<bb>/<file_id>.webp`
  */
 export function purgeOrphanThumbs(library: OpenLibrary): { removed: number } {
   const root = library.resolver.getMountPath();

@@ -284,11 +284,11 @@ function DeleteCacheModal({
         <Text size="sm">
           This removes <b>{library?.name}</b> from the app and deletes its{' '}
           <Text span ff="monospace" size="sm">
-            .warehouse3d.db
+            .meshFlask.db
           </Text>{' '}
           and{' '}
           <Text span ff="monospace" size="sm">
-            .warehouse3d/
+            .meshFlask/
           </Text>{' '}
           thumbnail cache on disk.
         </Text>

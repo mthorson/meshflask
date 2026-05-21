@@ -15,7 +15,7 @@ export interface WalkOptions {
 }
 
 const DEFAULT_IGNORE: ReadonlySet<string> = new Set([
-  '.warehouse3d',
+  '.meshFlask',
   '.git',
   '.svn',
   '.hg',

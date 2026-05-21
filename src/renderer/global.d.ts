@@ -2,8 +2,8 @@ import type { IpcApi } from '@shared/types';
 
 declare global {
   interface Window {
-    warehouse3d: IpcApi;
+    meshFlask: IpcApi;
   }
 }
 
-export {};
+export { };

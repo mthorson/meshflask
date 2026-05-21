@@ -14,7 +14,7 @@ import migration009 from './migrations/009_hierarchical_tags.sql?raw';
 import migration010 from './migrations/010_file_camera.sql?raw';
 
 export const SCHEMA_VERSION = 10;
-export const DB_FILENAME = '.warehouse3d.db';
+export const DB_FILENAME = '.meshFlask.db';
 
 interface Migration {
   version: number;
