@@ -49,7 +49,7 @@ describe.runIf(hasFixtures)('walkLibrary against testfiles/', () => {
     expect(oneStl.parentDir).toBe('Manticore - Tabletop Miniature - 4441441/files');
   });
 
-  it('skips the .warehouse3d/ cache directory if present', async () => {
+  it('skips the .meshFlask/ cache directory if present', async () => {
     // Just verify the walker doesn't blow up on a real directory and that
     // there is no leakage of dot-files into the result set.
     const resolver = new PathResolver(TESTFILES);

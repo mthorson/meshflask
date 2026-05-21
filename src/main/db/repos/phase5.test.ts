@@ -46,7 +46,7 @@ function freshDb() {
 function freshThumb(fileId: number, mtime: number, version = RENDERER_VERSION): ThumbnailRow {
   return {
     fileId,
-    thumbRelPath: `.warehouse3d/thumbs/00/${fileId}.png`,
+    thumbRelPath: `.meshFlask/thumbs/00/${fileId}.png`,
     renderedAt: 1000,
     sourceMtimeMs: mtime,
     sourceSha256: null,

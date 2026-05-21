@@ -1,9 +1,9 @@
 {
-  "name": "warehouse3d",
+  "name": "meshFlask",
   "version": "0.1.0",
   "description": "Adobe Bridge-style browser and organizer for 3D model files",
   "main": "out/main/index.js",
-  "author": "warehouse3d",
+  "author": "meshFlask",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
@@ -39,8 +39,8 @@
     "uuid": "^10.0.0"
   },
   "build": {
-    "appId": "com.warehouse3d.app",
-    "productName": "Warehouse3D",
+    "appId": "com.meshFlask.app",
+    "productName": "meshFlask",
     "copyright": "Copyright © Matt Thorson",
     "directories": {
       "output": "release",
@@ -63,8 +63,20 @@
       "category": "public.app-category.graphics-design",
       "icon": "build/icon.png",
       "target": [
-        { "target": "dmg", "arch": ["arm64", "x64"] },
-        { "target": "zip", "arch": ["arm64", "x64"] }
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
       ],
       "hardenedRuntime": false,
       "gatekeeperAssess": false,
@@ -76,7 +88,12 @@
     "win": {
       "icon": "build/icon.png",
       "target": [
-        { "target": "nsis", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "nsis": {
@@ -88,7 +105,12 @@
       "icon": "build/icon.png",
       "category": "Graphics",
       "target": [
-        { "target": "AppImage", "arch": ["x64"] }
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     }
   },

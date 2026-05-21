@@ -1,6 +1,6 @@
-# Warehouse3D
+# meshFlask
 
-![Warehouse3D screenshot](docs/screenshot.png)
+![meshFlask screenshot](docs/screenshot.png)
 
 A desktop browser and organizer for 3D model files. This project is
 aimed specifically at the 3D printing community but will be enhanced for
@@ -15,7 +15,7 @@ difficult to search through, this is for you.
 ## What's in it
 
 Open one or more folders as "libraries". Each library gets its own SQLite
-database (`.warehouse3d.db` at the library root) tagged with a UUID; the
+database (`.meshFlask.db` at the library root) tagged with a UUID; the
 per-machine mount path lives in your user app data. Move the library
 between machines and the app reconnects by UUID — you just edit one line
 in `libraries.json`.
@@ -108,11 +108,11 @@ npm run dev
 ## Adding a library
 
 Click the **+** in the sidebar, pick a folder. The app writes
-`<folder>/.warehouse3d.db` and records the folder's mount path in your
+`<folder>/.meshFlask.db` and records the folder's mount path in your
 user app data:
 
-- macOS: `~/Library/Application Support/warehouse3d/`
-- Windows: `%APPDATA%/warehouse3d/`
+- macOS: `~/Library/Application Support/meshFlask/`
+- Windows: `%APPDATA%/meshFlask/`
 
 Two files live there:
 
@@ -174,7 +174,7 @@ Two non-default quirks:
 ### Thumbnail storage
 
 WebP sidecars at
-`<library_root>/.warehouse3d/thumbs/<aa>/<bb>/<file_id>.webp` (two-level
+`<library_root>/.meshFlask/thumbs/<aa>/<bb>/<file_id>.webp` (two-level
 hash fanout — a million-file library doesn't end up with a million
 files in one directory). They're not stored as SQLite BLOBs because
 that balloons the DB file and makes backups annoying.

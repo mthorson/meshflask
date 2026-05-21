@@ -22,7 +22,7 @@ export type AddLibraryResult =
 
 export interface RemoveLibraryRequest {
   id: string;
-  /** When true, also delete the .warehouse3d.db and sidecar caches on disk. */
+  /** When true, also delete the .meshFlask.db and sidecar caches on disk. */
   deleteCache?: boolean;
 }
 
@@ -248,12 +248,12 @@ export interface BatchRenameItem {
 export type BatchRenameResult =
   | { ok: true; renamed: number }
   | {
-      ok: false;
-      /** Collisions detected before any FS work happened. */
-      collisions?: string[];
-      /** Free-form error when an FS move failed; previously-renamed items were rolled back. */
-      error?: string;
-    };
+    ok: false;
+    /** Collisions detected before any FS work happened. */
+    collisions?: string[];
+    /** Free-form error when an FS move failed; previously-renamed items were rolled back. */
+    error?: string;
+  };
 
 export interface TagRecord {
   id: number;

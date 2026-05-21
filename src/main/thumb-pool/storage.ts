@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, writeFile, rm } from 'node:fs/promises';
 import { dirname, join, sep } from 'node:path';
 
-export const THUMB_DIR = '.warehouse3d/thumbs';
+export const THUMB_DIR = '.meshFlask/thumbs';
 export const THUMB_EXT = 'png';
 const RENDER_SIZE = 512;
 

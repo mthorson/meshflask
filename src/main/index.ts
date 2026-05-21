@@ -29,7 +29,7 @@ function createMainWindow(): BrowserWindow {
     minHeight: 600,
     show: false,
     backgroundColor: '#1a1b1e',
-    title: 'Warehouse3D',
+    title: 'meshFlask',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,

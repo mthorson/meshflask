@@ -189,4 +189,4 @@ const api: IpcApi = {
   }
 };
 
-contextBridge.exposeInMainWorld('warehouse3d', api);
+contextBridge.exposeInMainWorld('meshFlask', api);

@@ -23,7 +23,7 @@ export interface WatcherOptions {
 }
 
 const IGNORE_DIR_NAMES: ReadonlySet<string> = new Set([
-  '.warehouse3d',
+  '.meshFlask',
   '.git',
   '.svn',
   '.hg',
