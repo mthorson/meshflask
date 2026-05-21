@@ -8,7 +8,7 @@ The current build is specifically aimed at the 3D printing community.
 Supported file formats common to 3D printing:
 **glb, gltf, obj, stl, ply, 3mf**.
 
-Is your collection of STL, OBJ, and 3MF files is a dumpster fire?
+Is your collection of STL, OBJ, and 3MF files a dumpster fire?
 Well then, this app is for you!
 
 ## What's in it
