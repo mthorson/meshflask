@@ -1,0 +1,38 @@
+<!-- Source for the app icon. Rendered to PNG by `npm run build:icon` (uses
+     sharp) into ./icon.png, which electron-builder then converts to the
+     platform-specific .icns / .ico at packaging time. Matches the in-app
+     logo in src/renderer/components/Logo.tsx. -->
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wh3d-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7d2fe" />
+      <stop offset="1" stop-color="#818cf8" />
+    </linearGradient>
+    <linearGradient id="wh3d-left" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f46e5" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#3730a3" stop-opacity="0.25" />
+    </linearGradient>
+    <linearGradient id="wh3d-right" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#312e81" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#1e1b4b" stop-opacity="0.25" />
+    </linearGradient>
+    <!-- A flat dark backdrop fills the full icon area so the cube floats on
+         a consistent square. macOS/Windows/Linux icon containers all crop
+         differently; the backdrop guarantees the foreground stays the same. -->
+    <linearGradient id="wh3d-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e1b4b" />
+      <stop offset="1" stop-color="#0b0b1a" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="6" fill="url(#wh3d-bg)" />
+  <g transform="translate(0,0)">
+    <path d="M16 6 L27 12.5 L16 19 L5 12.5 Z" fill="url(#wh3d-top)" />
+    <path d="M5 12.5 L16 19 L16 28 L5 21.5 Z" fill="url(#wh3d-left)" />
+    <path d="M27 12.5 L16 19 L16 28 L27 21.5 Z" fill="url(#wh3d-right)" />
+    <g fill="none" stroke="#a5b4fc" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M16 6 L27 12.5 L27 21.5 L16 28 L5 21.5 L5 12.5 Z" />
+      <path d="M5 12.5 L16 19 L27 12.5" />
+      <path d="M16 19 L16 28" />
+    </g>
+  </g>
+</svg>

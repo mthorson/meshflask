@@ -1,0 +1,60 @@
+/* Resize-handle styling for react-resizable-panels. The handle's hit area
+ * is wider than the visible bar so users can grab it easily; the visible
+ * bar highlights on hover and while active. Two modifiers because the
+ * handle is a thin vertical bar for column splits and a thin horizontal
+ * bar for row splits. */
+
+.wh3d-resize-handle {
+  position: relative;
+  flex-shrink: 0;
+  background: transparent;
+  touch-action: none;
+}
+
+/* Between columns — drag left/right. */
+.wh3d-resize-handle--col {
+  width: 6px;
+  cursor: col-resize;
+}
+
+.wh3d-resize-handle--col::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2px;
+  width: 2px;
+  background: var(--mantine-color-dark-4);
+  transition: background 120ms ease, width 120ms ease, left 120ms ease;
+}
+
+.wh3d-resize-handle--col:hover::before,
+.wh3d-resize-handle--col[data-resize-handle-active]::before {
+  background: var(--mantine-color-indigo-5);
+  width: 4px;
+  left: 1px;
+}
+
+/* Between rows — drag up/down. */
+.wh3d-resize-handle--row {
+  height: 6px;
+  cursor: row-resize;
+}
+
+.wh3d-resize-handle--row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2px;
+  height: 2px;
+  background: var(--mantine-color-dark-4);
+  transition: background 120ms ease, height 120ms ease, top 120ms ease;
+}
+
+.wh3d-resize-handle--row:hover::before,
+.wh3d-resize-handle--row[data-resize-handle-active]::before {
+  background: var(--mantine-color-indigo-5);
+  height: 4px;
+  top: 1px;
+}
