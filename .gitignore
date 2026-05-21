@@ -45,10 +45,6 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# AI assistant local state
-.claude/
-.cursor/
-
 # App runtime data
 .meshFlask/
 .meshFlask.db
