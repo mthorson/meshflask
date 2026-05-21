@@ -1,5 +1,7 @@
 # Warehouse3D
 
+![Warehouse3D screenshot](docs/screenshot.png)
+
 A desktop browser and organizer for 3D model files. This project is
 aimed specifically at the 3D printing community but will be enhanced for
 3D artists as well.
