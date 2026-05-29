@@ -141,6 +141,32 @@ export class ThumbPool {
 
   private spawnWorker(): Worker {
     const id = this.nextWorkerId++;
+    // ─────────────────────────────────────────────────────────────────────
+    // SECURITY: thumb-worker BrowserWindow threat model
+    //
+    // The worker runs with nodeIntegration:true / contextIsolation:false /
+    // sandbox:false / webSecurity:false. These are normally renderer-side
+    // red flags, but the worker has no user-controlled attack surface:
+    //
+    //  1. It only loads our own bundled `thumb-worker.html` (loadURL/
+    //     loadFile below) — never arbitrary URLs and never user input.
+    //  2. Its only inputs are ThumbRenderRequest messages this main process
+    //     sends over IPC. The `absPath` field is always produced by
+    //     `PathResolver.toAbsolute(file.relPath)` on a row this main
+    //     process pulled from the library DB; `relPath` is validated for
+    //     traversal segments in PathResolver, so the worker's `fs.readFile`
+    //     cannot be steered outside an attached library by IPC payload.
+    //  3. webSecurity is off because Three.js loaders need to follow
+    //     sibling `.bin` / texture references via `file://` URLs from the
+    //     model's directory — there's no remote origin in the picture.
+    //  4. Untrusted file content (the 3MF zip parse) goes through the
+    //     zip-safety guards in src/renderer/three/zip-safety.ts before
+    //     fflate is allowed to allocate decompression buffers.
+    //
+    // If you ever want to accept absPath from the renderer side (drag/drop
+    // import, "open this loose file" feature, etc.), validate it against
+    // an attached library mount in the main process FIRST.
+    // ─────────────────────────────────────────────────────────────────────
     const window = new BrowserWindow({
       show: false,
       width: 600,
