@@ -14,8 +14,9 @@ import {
 import { thumbPool } from '@main/thumb-pool/pool';
 import { queueRunner } from '@main/thumb-pool/queue-runner';
 import { DEFAULT_LOG_LEVEL, initLogger, scopedLogger, setLogLevel } from '@main/logger';
-import { buildMenu } from '@main/menu';
+import { buildMenu, subscribeMenuToUndoQueue } from '@main/menu';
 import * as prefsStore from '@main/preferences/store';
+import { deliverPendingOnReady } from '@main/events';
 
 const isDev = !app.isPackaged;
 const log = scopedLogger('app');
@@ -43,6 +44,9 @@ function createMainWindow(): BrowserWindow {
   });
 
   win.once('ready-to-show', () => win.show());
+  // Flush any library events that fired before the first window existed
+  // (e.g. integrity-check failures during openAllFromRegistry).
+  deliverPendingOnReady(win);
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     void shell.openExternal(url);
@@ -68,6 +72,7 @@ void app.whenReady().then(() => {
   log.info('app ready', { version: app.getVersion(), platform: process.platform, dev: isDev });
 
   Menu.setApplicationMenu(buildMenu());
+  subscribeMenuToUndoQueue();
   registerAssetProtocols();
   registerLibraryIpc();
   registerFilesIpc();

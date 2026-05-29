@@ -1,14 +1,17 @@
 import { BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import { spawn } from 'node:child_process';
-import { basename, extname } from 'node:path';
+import { basename, extname, join } from 'node:path';
 import { existsSync } from 'node:fs';
-import { platform } from 'node:os';
+import { homedir, platform } from 'node:os';
 import { IPC } from '@shared/ipc-channels';
 import type { ExternalAppRegistration, PreferencesFile } from '@shared/preferences';
 import * as store from '@main/preferences/store';
 import { getOpenLibrary } from '@main/libraries/manager';
 import { rebuildThumbnailCache, purgeOrphanThumbs } from '@main/cache/management';
-import { DEFAULT_LOG_LEVEL, openLogsFolder, setLogLevel } from '@main/logger';
+import { DEFAULT_LOG_LEVEL, openLogsFolder, setLogLevel, scopedLogger } from '@main/logger';
+import { runUndo } from '@main/undo/runner';
+
+const log = scopedLogger('shell');
 
 /**
  * Tokenize a CLI args template and substitute `{file}` / `{profile}`. Splits
@@ -125,6 +128,27 @@ export function registerPreferencesIpc(): void {
   ipcMain.handle(IPC.openLogsFolder, async (): Promise<void> => {
     await openLogsFolder();
   });
+
+  ipcMain.handle(IPC.openTrash, async (): Promise<void> => {
+    // No Electron API exists for "show OS trash". Open the per-platform
+    // default location; Windows has no stable user-facing path so we fall
+    // back to the shell:RecycleBinFolder URI via explorer.
+    const p = platform();
+    try {
+      if (p === 'darwin') {
+        await shell.openPath(join(homedir(), '.Trash'));
+      } else if (p === 'win32') {
+        spawn('explorer.exe', ['shell:RecycleBinFolder'], { detached: true, stdio: 'ignore' }).unref();
+      } else {
+        // Most XDG environments use ~/.local/share/Trash/files
+        await shell.openPath(join(homedir(), '.local/share/Trash/files'));
+      }
+    } catch (err) {
+      log.warn('openTrash failed', { err: (err as Error).message });
+    }
+  });
+
+  ipcMain.handle(IPC.undo, async () => runUndo());
 
   ipcMain.handle(IPC.rebuildThumbCache, async (_e, libraryId: string) => {
     const lib = getOpenLibrary(libraryId);

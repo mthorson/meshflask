@@ -181,6 +181,13 @@ const api: IpcApi = {
     ipcRenderer.invoke(IPC.exportContactSheet, libraryId, fileIds) as Promise<ExportResult>,
 
   openLogsFolder: () => ipcRenderer.invoke(IPC.openLogsFolder) as Promise<void>,
+  openTrash: () => ipcRenderer.invoke(IPC.openTrash) as Promise<void>,
+  undo: () =>
+    ipcRenderer.invoke(IPC.undo) as Promise<
+      | { ok: false; reason: 'empty' }
+      | { ok: true; label: string }
+      | { ok: false; reason: 'failed'; label: string; error: string }
+    >,
 
   onLibraryEvent: (handler: (event: LibraryFilesEvent) => void) => {
     const listener = (_e: IpcRendererEvent, event: LibraryFilesEvent) => handler(event);

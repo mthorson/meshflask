@@ -124,3 +124,16 @@ export function insertLibraryRow(
     'INSERT INTO library (id, name, schema_version, created_at) VALUES (?, ?, ?, ?)'
   ).run(args.id, args.name, SCHEMA_VERSION, Date.now());
 }
+
+/**
+ * `PRAGMA integrity_check` returns one row with value `'ok'` when the DB is
+ * healthy, or one or more rows describing errors. We collapse multi-row
+ * failures to the first error so the notification stays terse.
+ */
+export function runIntegrityCheck(db: Database.Database): { ok: true } | { ok: false; error: string } {
+  const rows = db.pragma('integrity_check') as Array<{ integrity_check: string }>;
+  if (rows.length === 1 && rows[0].integrity_check === 'ok') return { ok: true };
+  const first = rows[0]?.integrity_check ?? 'unknown error';
+  const more = rows.length > 1 ? ` (+${rows.length - 1} more)` : '';
+  return { ok: false, error: first + more };
+}
