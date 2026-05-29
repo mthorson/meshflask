@@ -8,6 +8,7 @@ import type { ExternalAppRegistration, PreferencesFile } from '@shared/preferenc
 import * as store from '@main/preferences/store';
 import { getOpenLibrary } from '@main/libraries/manager';
 import { rebuildThumbnailCache, purgeOrphanThumbs } from '@main/cache/management';
+import { DEFAULT_LOG_LEVEL, openLogsFolder, setLogLevel } from '@main/logger';
 
 /**
  * Tokenize a CLI args template and substitute `{file}` / `{profile}`. Splits
@@ -113,7 +114,16 @@ export function registerPreferencesIpc(): void {
   ipcMain.handle(IPC.getPreferences, async (): Promise<PreferencesFile> => store.getAll());
 
   ipcMain.handle(IPC.setPreferences, async (_e, prefs: PreferencesFile) => {
-    if (prefs && prefs.version === 1) store.saveAll(prefs);
+    if (prefs && prefs.version === 1) {
+      store.saveAll(prefs);
+      // Apply the saved level immediately so renderer-driven changes don't
+      // require a restart to take effect on main-side logs.
+      setLogLevel(prefs.logLevel ?? DEFAULT_LOG_LEVEL);
+    }
+  });
+
+  ipcMain.handle(IPC.openLogsFolder, async (): Promise<void> => {
+    await openLogsFolder();
   });
 
   ipcMain.handle(IPC.rebuildThumbCache, async (_e, libraryId: string) => {

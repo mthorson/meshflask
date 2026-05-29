@@ -455,6 +455,9 @@ export interface IpcApi {
   /** Pop a Save dialog, then render an HTML contact sheet of the supplied files as PDF. */
   exportContactSheet(libraryId: string, fileIds: number[]): Promise<ExportResult>;
 
+  /** Open the per-machine logs directory in the OS file manager. */
+  openLogsFolder(): Promise<void>;
+
   listExternalApps(): Promise<import('./preferences').ExternalAppRegistration[]>;
   /**
    * Pop the OS file-picker so the user chooses an app bundle/executable;

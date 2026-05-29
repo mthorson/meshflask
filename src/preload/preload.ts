@@ -180,6 +180,8 @@ const api: IpcApi = {
   exportContactSheet: (libraryId: string, fileIds: number[]) =>
     ipcRenderer.invoke(IPC.exportContactSheet, libraryId, fileIds) as Promise<ExportResult>,
 
+  openLogsFolder: () => ipcRenderer.invoke(IPC.openLogsFolder) as Promise<void>,
+
   onLibraryEvent: (handler: (event: LibraryFilesEvent) => void) => {
     const listener = (_e: IpcRendererEvent, event: LibraryFilesEvent) => handler(event);
     ipcRenderer.on(IPC_EVENT.libraryEvent, listener);

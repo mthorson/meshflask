@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { looksLikeNetworkMount } from '@shared/paths';
+import { scopedLogger } from '@main/logger';
 import migration001 from './migrations/001_init.sql?raw';
 import migration002 from './migrations/002_fts_triggers.sql?raw';
 import migration003 from './migrations/003_thumb_errors.sql?raw';
@@ -15,6 +16,8 @@ import migration010 from './migrations/010_file_camera.sql?raw';
 
 export const SCHEMA_VERSION = 10;
 export const DB_FILENAME = '.meshFlask.db';
+
+const log = scopedLogger('db');
 
 interface Migration {
   version: number;
@@ -68,19 +71,25 @@ function applyMigrations(db: Database.Database): void {
   const baseline = detectBaseline(db);
   for (const m of MIGRATIONS) {
     if (baseline >= m.version) continue;
-    const tx = db.transaction(() => {
-      db.exec(m.sql);
-      setUserVersion(db, m.version);
-      // Keep library.schema_version in lock-step for human inspection if the
-      // table exists at this point.
-      const hasLib = db
-        .prepare(`SELECT 1 FROM sqlite_master WHERE type='table' AND name='library' LIMIT 1`)
-        .get();
-      if (hasLib) {
-        db.prepare('UPDATE library SET schema_version = ?').run(m.version);
-      }
-    });
-    tx();
+    try {
+      const tx = db.transaction(() => {
+        db.exec(m.sql);
+        setUserVersion(db, m.version);
+        // Keep library.schema_version in lock-step for human inspection if the
+        // table exists at this point.
+        const hasLib = db
+          .prepare(`SELECT 1 FROM sqlite_master WHERE type='table' AND name='library' LIMIT 1`)
+          .get();
+        if (hasLib) {
+          db.prepare('UPDATE library SET schema_version = ?').run(m.version);
+        }
+      });
+      tx();
+      log.info('migration applied', { version: m.version });
+    } catch (err) {
+      log.error('migration failed', { version: m.version, err: (err as Error).message });
+      throw err;
+    }
   }
 }
 

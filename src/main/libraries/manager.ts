@@ -17,7 +17,10 @@ import { createThumbErrorsRepo, type ThumbErrorsRepo } from '@main/db/repos/thum
 import { createCollectionsRepo, type CollectionsRepo } from '@main/db/repos/collections';
 import { scanner } from '@main/scanner/service';
 import { PathResolver } from '@shared/paths';
+import { scopedLogger } from '@main/logger';
 import * as registry from './registry';
+
+const log = scopedLogger('libraries');
 
 /**
  * One open library: the per-machine registry entry plus a live DB handle and
@@ -62,6 +65,7 @@ function attachLibrary(entry: registry.RegistryEntry, db: Database.Database): Op
   };
   open.set(entry.id, handle);
   scanner.attach(entry.id, db, entry.mountPath);
+  log.info('library attached', { id: entry.id, name: entry.label, mountPath: entry.mountPath });
   return handle;
 }
 
@@ -71,10 +75,11 @@ function detachLibrary(id: string): void {
   if (handle) {
     try {
       handle.db.close();
-    } catch {
-      // best-effort
+    } catch (e) {
+      log.warn('library db.close failed', { id, err: (e as Error).message });
     }
     open.delete(id);
+    log.info('library detached', { id });
   }
 }
 
@@ -92,6 +97,7 @@ export function openAllFromRegistry(): LibrarySummary[] {
     }
     const dbPath = join(entry.mountPath, DB_FILENAME);
     if (!existsSync(dbPath)) {
+      log.warn('library mount missing on startup', { id: entry.id, mountPath: entry.mountPath });
       summaries.push(toSummary(entry, false));
       continue;
     }
@@ -99,6 +105,11 @@ export function openAllFromRegistry(): LibrarySummary[] {
       const db = openLibraryDatabase(entry.mountPath);
       const row = readLibraryRow(db);
       if (!row || row.id !== entry.id) {
+        log.warn('library id mismatch on registry open', {
+          id: entry.id,
+          rowId: row?.id,
+          mountPath: entry.mountPath
+        });
         db.close();
         summaries.push(toSummary(entry, false));
         continue;
@@ -106,7 +117,12 @@ export function openAllFromRegistry(): LibrarySummary[] {
       attachLibrary(entry, db);
       registry.touchLastSeen(entry.id);
       summaries.push(toSummary({ ...entry, lastSeen: Date.now() }, true));
-    } catch {
+    } catch (e) {
+      log.error('failed to open library from registry', {
+        id: entry.id,
+        mountPath: entry.mountPath,
+        err: (e as Error).message
+      });
       summaries.push(toSummary(entry, false));
     }
   }
@@ -170,6 +186,7 @@ export function addLibrary(args: {
   if (open.has(id)) detachLibrary(id);
   const entry = registry.findById(id)!;
   attachLibrary(entry, db);
+  log.info('library added', { id, name, mountPath });
 
   return { ok: true, library: toSummary(entry, true) };
 }
@@ -202,12 +219,18 @@ export function removeLibrary(args: {
   detachLibrary(args.id);
   const entry = registry.findById(args.id);
   registry.removeEntry(args.id);
+  log.info('library removed', { id: args.id, deleteCache: !!args.deleteCache });
 
   if (args.deleteCache && entry) {
     try {
       rmSync(join(entry.mountPath, DB_FILENAME), { force: true });
       rmSync(join(entry.mountPath, '.meshFlask'), { recursive: true, force: true });
     } catch (e) {
+      log.error('library cache delete failed', {
+        id: args.id,
+        mountPath: entry.mountPath,
+        err: (e as Error).message
+      });
       return {
         ok: false,
         error: `Removed registry entry but cache delete failed: ${(e as Error).message}`

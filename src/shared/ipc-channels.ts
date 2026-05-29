@@ -54,7 +54,8 @@ export const IPC = {
   duplicateFile: 'files:duplicate',
   deleteFile: 'files:delete',
   exportCollectionZip: 'export:collectionZip',
-  exportContactSheet: 'export:contactSheet'
+  exportContactSheet: 'export:contactSheet',
+  openLogsFolder: 'logs:openFolder'
 } as const;
 
 /** One-way main → renderer events (sent via webContents.send). */
